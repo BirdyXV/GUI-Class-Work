@@ -148,6 +148,14 @@ public class GUIManager : MonoBehaviour
         PlayerPrefs.SetFloat("Volume", music.volume);
         PlayerPrefs.SetFloat("Brightness", dirLight.intensity);
 
+        PlayerPrefs.SetString("Forward", forward.ToString());
+        PlayerPrefs.SetString("Backward", backward.ToString());
+        PlayerPrefs.SetString("Left", left.ToString());
+        PlayerPrefs.SetString("Right", right.ToString());
+        PlayerPrefs.SetString("Jump", jump.ToString());
+        PlayerPrefs.SetString("Sprint", sprint.ToString());
+        PlayerPrefs.SetString("Crouch", crouch.ToString());
+        PlayerPrefs.SetString("Interact", interact.ToString());
     }
 
     public void Load()
@@ -320,5 +328,21 @@ public class GUIManager : MonoBehaviour
         }
     }
     #endregion
+
+    /* 
+    
+    RESOLUTIONS
+    3840 x 2160
+    1920 x 1080
+    1280 x 1080
+    2560 x 1440
+    1680 x 960
+    1152 x 648
+    1600 x 900
+    1024 x 576
+
+    */
+
+
 }
 
