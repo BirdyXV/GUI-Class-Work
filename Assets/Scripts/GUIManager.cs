@@ -11,6 +11,9 @@ public class GUIManager : MonoBehaviour
     public bool gameScene;
     public bool showOptions;
     public bool pause;
+    public bool fullScreenToggle;
+
+
     [Header("Keys")]
     public KeyCode forward;
     public KeyCode backward;
@@ -33,18 +36,41 @@ public class GUIManager : MonoBehaviour
     public Text crouchText;
     public Text interactText;
 
-    [Header("References")]
+    [Header("GUIElements")]
     public GameObject menu;
     public GameObject options;
-    public Slider volumeSlider, brightnessSlider;
+    public Toggle fullWindowToggle;
+
+
+    [Header("References")]
+    public Slider volumeSlider;
+    public Slider brightnessSlider;
     public AudioSource music;
     public Light dirLight;
+
+    [Header("Resolutions")]
+    public int index;
+    public int[] resX, resY;
+    public Dropdown resolutionDropdown;
+
 
     #endregion
 
     void Start()
     {
         Time.timeScale = 1;
+
+        #region PauseMenu
+        if (gameScene)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        #endregion 
+        fullScreenToggle = true;
+
+        ResolutionChange();
 
         if (PlayerPrefs.HasKey("Volume"))
         {
@@ -118,6 +144,10 @@ public class GUIManager : MonoBehaviour
         Application.Quit();
         Debug.Log("Exit");
     }
+    public void Return()
+    {
+        TogglePause();
+    }
 
     public void ShowOptions()
     {
@@ -172,9 +202,38 @@ public class GUIManager : MonoBehaviour
         PlayerPrefs.SetFloat("Brightness", 1);
     }
 
-    public void TogglePause()
+    public bool TogglePause()
     {
+        if (pause)
+        {
+            if (!showOptions)
+            {
+                Time.timeScale = 1;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                menu.SetActive(false);
+                pause = false;
+            }
+            else
+            {
+                showOptions = false;
+                options.SetActive(false);
+                menu.SetActive(true);
 
+
+            }
+            return false;
+
+        }
+        else
+        {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            pause = true;
+            menu.SetActive(true);
+            return true;
+        }
     }
     #region Key Press Event
     void OnGUI()
@@ -328,7 +387,20 @@ public class GUIManager : MonoBehaviour
         }
     }
     #endregion
+    #region FullScreen Toggle And Resolutions
+    public void FullScreenToggle()
+    {
+        fullScreenToggle = !fullScreenToggle;
+        Screen.fullScreen = !Screen.fullScreen;
+    }
 
+    public void ResolutionChange()
+    {
+        index = resolutionDropdown.value;
+
+        Screen.SetResolution(resX[index], resY[index], fullScreenToggle);
+    }
+    #endregion
     /* 
     
     RESOLUTIONS
@@ -341,8 +413,8 @@ public class GUIManager : MonoBehaviour
     1600 x 900
     1024 x 576
 
+    Screen.SetResolution(x, y, z)
     */
-
 
 }
 
