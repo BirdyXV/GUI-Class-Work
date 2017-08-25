@@ -401,20 +401,7 @@ public class GUIManager : MonoBehaviour
         Screen.SetResolution(resX[index], resY[index], fullScreenToggle);
     }
     #endregion
-    /* 
-    
-    RESOLUTIONS
-    3840 x 2160
-    1920 x 1080
-    1280 x 1080
-    2560 x 1440
-    1680 x 960
-    1152 x 648
-    1600 x 900
-    1024 x 576
 
-    Screen.SetResolution(x, y, z)
-    */
 
 }
 
