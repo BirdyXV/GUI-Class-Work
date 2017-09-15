@@ -47,6 +47,8 @@ public class MenuScript : MonoBehaviour
         music.volume = 1;
         volumeSlider = music.volume;
         brightnessSlider = dirLight.intensity;
+
+
     }
 
     void Update()
@@ -124,6 +126,7 @@ public class MenuScript : MonoBehaviour
                 showOptions = false;
             }
             #region KeyBinding
+
             GUI.Box(new Rect(scrW * 13, scrH * 2.90f, scrW, scrH), "W");
 
             GUI.Box(new Rect(scrW * 13f, scrH * 4, scrW, scrH), "S");
