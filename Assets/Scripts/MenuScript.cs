@@ -48,6 +48,16 @@ public class MenuScript : MonoBehaviour
         volumeSlider = music.volume;
         brightnessSlider = dirLight.intensity;
 
+        // Set our keys to the preset keys we may have save or set the keys to default
+        forward = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Forward", "W"));
+        backward = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Backward", "S"));
+        left = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left", "A"));
+        right = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right", "D"));
+        jump = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Jump", "Space"));
+        crouch = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Crouch", "C"));
+        sprint = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Sprint", "LeftShift"));
+        interact = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Interact", "E"));
+
 
     }
 
@@ -127,19 +137,86 @@ public class MenuScript : MonoBehaviour
             }
             #region KeyBinding
 
-            GUI.Box(new Rect(scrW * 13, scrH * 2.90f, scrW, scrH), "W");
+            Event e = Event.current;
 
-            GUI.Box(new Rect(scrW * 13f, scrH * 4, scrW, scrH), "S");
+            int bindingColA = 0;
+            int bindingColB = 0;
+            int buttonColA = 0;
+            int buttonColB = 0;
 
-            GUI.Box(new Rect(scrW * 11.90f, scrH * 4, scrW, scrH), "A");
 
-            GUI.Box(new Rect(scrW * 14.10f, scrH * 4, scrW, scrH), "D");
+            string[] keysLabelColA = { "Forward", "Backward", "Left", "Right" };    // Array of key labels
+            string[] keysLabelColB = { "Crouch", "Jump", "Sprint", "Interact" };    // Column B
+            string[] buttonLabelColA = { "W", "A", "S", "D" };                      // Array of buttons
+            string[] buttonLabelColB = { "Space", "Left Ctrl", "Left Shift", "E" }; // Column B
 
-            GUI.Box(new Rect(scrW * 11.90f, scrH * 5.10f, scrW, scrH), "E");
 
-            GUI.Box(new Rect(scrW * 13, scrH * 5.10f, scrW, scrH), "LMB");
+            foreach (string keysLabelLeft in keysLabelColA)
+            {
+                // Console.WriteLine("{0} ", keysLabelLeft);
+                GUI.Box(new Rect(9f * scrW, 3f * scrH + (bindingColA * (scrH * 0.5f)), 1.75f * scrW, 0.5f * scrH), keysLabelLeft); // label
+                bindingColA++;
+            }
 
-            GUI.Box(new Rect(scrW * 14.10f, scrH * 5.10f, scrW, scrH), "2");
+            foreach (string buttonsLabelLeft in buttonLabelColA)
+            {
+                if (GUI.Button(new Rect(11f * scrW, 3f * scrH + (buttonColA * (scrH * 0.5f)), scrW, 0.5f * scrH), buttonsLabelLeft)) // button
+                {
+                    Debug.Log("Clicked the button");
+
+
+                    if (forward == KeyCode.None)
+                    {
+                        // If an event is triggered by a key press
+                        if (e.isKey)
+                        {
+                            Debug.Log("Key Presssed: " + e.keyCode);
+                            // If that key is not the same as any other key 
+                            if (!(e.keyCode == backward || e.keyCode == left || e.keyCode == right || e.keyCode == jump || e.keyCode == crouch || e.keyCode == sprint || e.keyCode == interact))
+                            {
+                                // Set forward to the event key that was pressed
+                                forward = e.keyCode;
+
+                                // Set the holding key to none
+                                holdingKey = KeyCode.None;
+
+                                // Set the GUI to the new key
+                                buttonLabelColA[0] = forward.ToString();
+                            }
+
+                            // Otherwise if it is the same as another key
+                            else
+                            {
+                                // Set the forward key back to the previous key
+                                forward = holdingKey;
+
+                                // Set the holding to none
+                                holdingKey = KeyCode.None;
+
+                                // Set the GUI to the previous key
+                                buttonLabelColA[0] = forward.ToString();
+                            }
+                        }
+                    }
+                }
+                buttonColA++;
+            }
+
+            foreach (string keysLabelRight in keysLabelColB)
+            {
+                // Console.WriteLine("{0} ", keysLabelLeft);
+                GUI.Box(new Rect(12.1f * scrW, 3f * scrH + (bindingColB * (scrH * 0.5f)), 1.75f * scrW, 0.5f * scrH), keysLabelRight); // label
+                bindingColB++;
+            }
+
+            foreach (string buttonsLabelRight in buttonLabelColB)
+            {
+                if (GUI.Button(new Rect(14.1f * scrW, 3f * scrH + (buttonColB * (scrH * 0.5f)), scrW, 0.5f * scrH), buttonsLabelRight)) // button
+                {
+                    Debug.Log("Clicked the button");
+                }
+                buttonColB++;
+            }
             #endregion
             #region Brightness and Audio
             int lightSoundIndex = 0;
