@@ -31,7 +31,9 @@ public class MenuScript : MonoBehaviour
     public int index;
     public int[] resX, resY;
     public float scrW, scrH;
-
+    [Header("Art")]
+    public GUIStyle background;
+    public GUISkin menuSkin;
 
 
     #endregion
@@ -41,7 +43,8 @@ public class MenuScript : MonoBehaviour
         scrH = Screen.height / 9;
 
         dirLight = GameObject.FindGameObjectWithTag("Sun").GetComponent<Light>();
-        music = GameObject.Find("MenuMusic").GetComponent<AudioSource>();
+        music = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioSource>();
+        music.volume = 1;
         volumeSlider = music.volume;
         brightnessSlider = dirLight.intensity;
     }
@@ -61,7 +64,7 @@ public class MenuScript : MonoBehaviour
             else
             {
                 volumeSlider = 0;
-                music.volume = 0;
+                music.volume = 1;
             }
         }
         if (dirLight != null)
@@ -86,18 +89,20 @@ public class MenuScript : MonoBehaviour
     {
         if (!showOptions)//if we are on our Main Menu and not our Options
         {
-            GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");//background
-            GUI.Box(new Rect(4 * scrW, 0.25f * scrH, 8 * scrW, 2 * scrH), "Jaymie's Awesomeness YEEEE");//title
+
+            GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "", background);//background
+            GUI.skin = menuSkin;
+            GUI.Box(new Rect(4 * scrW, 0.25f * scrH, 8 * scrW, 2 * scrH), "Naruto");//title
             //Buttons
-            if (GUI.Button(new Rect(6 * scrW, 4 * scrH, 4 * scrW, scrH), "Play"))
+            if (GUI.Button(new Rect(0.7f * scrW, 4 * scrH, 4 * scrW, scrH), "Play"))
             {
                 SceneManager.LoadScene(1);
             }
-            if (GUI.Button(new Rect(6 * scrW, 5 * scrH, 4 * scrW, scrH), "Options"))
+            if (GUI.Button(new Rect(0.7f * scrW, 5 * scrH, 4 * scrW, scrH), "Options"))
             {
                 showOptions = true;
             }
-            if (GUI.Button(new Rect(6 * scrW, 6 * scrH, 4 * scrW, scrH), "Exit"))
+            if (GUI.Button(new Rect(0.7f * scrW, 6 * scrH, 4 * scrW, scrH), "Exit"))
             {
                 Application.Quit();
             }
