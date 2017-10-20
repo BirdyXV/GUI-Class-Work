@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class CustomisationGet : MonoBehaviour
 {
     public Renderer character;
@@ -16,13 +16,15 @@ public class CustomisationGet : MonoBehaviour
     {
         if (!PlayerPrefs.HasKey("CharacterName"))
         {
-            Application.LoadLevel(1);
+            SceneManager.LoadScene(1);
         }
         SetTexture("Skin", PlayerPrefs.GetInt("SkinIndex"));
         SetTexture("Hair", PlayerPrefs.GetInt("HairIndex"));
         SetTexture("Mouth", PlayerPrefs.GetInt("MouthIndex"));
-        SetTexture("Eye", PlayerPrefs.GetInt("EyesIndex"));
-        gameObject.name = PlayerPrefs.GetString("PlayerName");
+        SetTexture("Eyes", PlayerPrefs.GetInt("EyesIndex"));
+        SetTexture("Armour", PlayerPrefs.GetInt("ArmourIndex"));
+        SetTexture("Clothes", PlayerPrefs.GetInt("ClothesIndex"));
+        gameObject.name = PlayerPrefs.GetString("CharacterName");
     }
     public void SetTexture(string type, int dir)
     {
@@ -48,6 +50,16 @@ public class CustomisationGet : MonoBehaviour
             case "Eyes":
                 tex = Resources.Load("Character/Eyes_" + dir.ToString()) as Texture2D;
                 matIndex = 4;
+                break;
+
+            case "Armour":
+                tex = Resources.Load("Character/Armour_" + dir.ToString()) as Texture2D;
+                matIndex = 5;
+                break;
+
+            case "Clothes":
+                tex = Resources.Load("Character/Clothes_" + dir.ToString()) as Texture2D;
+                matIndex = 6;
                 break;
         }
         Material[] mats = character.materials;

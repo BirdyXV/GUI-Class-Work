@@ -13,11 +13,13 @@ public class CustomisationSet : MonoBehaviour
     public List<Texture2D> hair = new List<Texture2D>();
     public List<Texture2D> mouth = new List<Texture2D>();
     public List<Texture2D> eyes = new List<Texture2D>();
+    public List<Texture2D> armour = new List<Texture2D>();
+    public List<Texture2D> clothes = new List<Texture2D>();
 
     // Index numbers for our current skin, hair, mouth, eyes textures
     [Header("Index")]
     public int skinIndex;
-    public int hairIndex, mouthIndex, eyesIndex;
+    public int hairIndex, mouthIndex, eyesIndex, armourIndex, clothesIndex;
 
     // Renderer for our character mesh so we can reference a material list
     [Header("Renderer")]
@@ -26,7 +28,7 @@ public class CustomisationSet : MonoBehaviour
     // Max amount of skin, hair, mouth, eyes textures that our lists are filling with
     [Header("Max Index")]
     public int skinMax;
-    public int hairMax, mouthMax, eyesMax;
+    public int hairMax, mouthMax, eyesMax, armourMax, clothesMax;
 
     // Name of our character that the user is making
     [Header("Character Name")]
@@ -72,6 +74,24 @@ public class CustomisationSet : MonoBehaviour
             // Add our temp texture that we just found to the eyes List            
             eyes.Add(temp);
         }
+
+        // For loop looping from 0 to less than the max amount of armour textures we need
+        for (int i = 0; i < armourMax; i++)
+        {
+            // Creating a temp Texture2D that it grabs using Resources.Load from the Character File looking for Armour_#
+            Texture2D temp = Resources.Load("Character/Armour_" + i.ToString()) as Texture2D;
+            // Add our temp texture that we just found to the armour List            
+            armour.Add(temp);
+        }
+
+        // For loop looping from 0 to less than the max amount of clothes textures we need
+        for (int i = 0; i < clothesMax; i++)
+        {
+            // Creating a temp Texture2D that it grabs using Resources.Load from the Character File looking for Clothes_#
+            Texture2D temp = Resources.Load("Character/Clothes_" + i.ToString()) as Texture2D;
+            // Add our temp texture that we just found to the clothes List            
+            clothes.Add(temp);
+        }
         #endregion
         // Connect and find the SkinnedMeshRenderer thats in the scene to the variable we made for Renderer
         character = GameObject.Find("Mesh").GetComponent<SkinnedMeshRenderer>();
@@ -81,6 +101,8 @@ public class CustomisationSet : MonoBehaviour
         SetTexture("Hair", 0);
         SetTexture("Mouth", 0);
         SetTexture("Eyes", 0);
+        SetTexture("Armour", 0);
+        SetTexture("Clothes", 0);
         #endregion
     }
     #endregion
@@ -131,7 +153,7 @@ public class CustomisationSet : MonoBehaviour
                 max = mouthMax;
                 // Textures is our list .ToArray()
                 textures = mouth.ToArray();
-                // Material index element number is 2
+                // Material index element number is 3
                 matIndex = 3;
                 // Break
                 break;
@@ -143,8 +165,32 @@ public class CustomisationSet : MonoBehaviour
                 max = eyesMax;
                 // Textures is our list .ToArray()
                 textures = eyes.ToArray();
-                // Material index element number is 2
+                // Material index element number is 4
                 matIndex = 4;
+                // Break
+                break;
+            // Armour is 5
+            case "Armour":
+                // Index is the same as our index
+                index = armourIndex;
+                // Max is the same as our max
+                max = armourMax;
+                // Textures is our list .ToArray()
+                textures = armour.ToArray();
+                // Material index element number is 5
+                matIndex = 5;
+                // Break
+                break;
+            // Clothes are 6
+            case "Clothes":
+                // Index is the same as our index
+                index = clothesIndex;
+                // Max is the same as our max
+                max = clothesMax;
+                // Textures is our list .ToArray()
+                textures = clothes.ToArray();
+                // Material index element number is 5
+                matIndex = 6;
                 // Break
                 break;
         }
@@ -200,6 +246,20 @@ public class CustomisationSet : MonoBehaviour
                 eyesIndex = index;
                 //  Break
                 break;
+
+            //  Case armour
+            case "Armour":
+                //  Armour index equals our index
+                armourIndex = index;
+                //  Break
+                break;
+
+            //  Case clothes
+            case "Clothes":
+                //  Clothes index equals our index
+                clothesIndex = index;
+                //  Break
+                break;
         }
         #endregion
     }
@@ -215,6 +275,9 @@ public class CustomisationSet : MonoBehaviour
         PlayerPrefs.SetInt("HairIndex", hairIndex);
         PlayerPrefs.SetInt("MouthIndex", mouthIndex);
         PlayerPrefs.SetInt("EyesIndex", eyesIndex);
+        PlayerPrefs.SetInt("ArmourIndex", armourIndex);
+        PlayerPrefs.SetInt("ClothesIndex", clothesIndex);
+
         // SetString CharacterName
         PlayerPrefs.SetString("CharacterName", charName);
     }
@@ -301,6 +364,42 @@ public class CustomisationSet : MonoBehaviour
         // Move down the screen with the int using ++ each grouping of GUI elements are moved using this
         i++;
         #endregion
+        #region Armour
+        // GUI button on the left of the screen with the contence <
+        if (GUI.Button(new Rect(0.25f * scrW, scrH + i * (0.5f * scrH), 0.5f * scrW, 0.5f * scrH), "<"))
+        {
+            // When pressed the button will run SetTexture and grab the Armour Material and move the texture index in the direction  -1
+            SetTexture("Armour", -1);
+        }
+        // GUI Box or Lable on the left of the screen with the contence Armour
+        GUI.Box(new Rect(0.75f * scrW, scrH + i * (0.5f * scrH), scrW, 0.5f * scrH), "Armour");
+        // GUI button on the left of the screen with the contence >
+        if (GUI.Button(new Rect(1.75f * scrW, scrH + i * (0.5f * scrH), 0.5f * scrW, 0.5f * scrH), ">"))
+        // When pressed the button will run SetTexture and grab the Armour Material and move the texture index in the direction  1
+        {
+            SetTexture("Armour", 1);
+        }
+        // Move down the screen with the int using ++ each grouping of GUI elements are moved using this
+        i++;
+        #endregion
+        #region Clothes
+        // GUI button on the left of the screen with the contence <
+        if (GUI.Button(new Rect(0.25f * scrW, scrH + i * (0.5f * scrH), 0.5f * scrW, 0.5f * scrH), "<"))
+        {
+            // When pressed the button will run SetTexture and grab the Clothes Material and move the texture index in the direction  -1
+            SetTexture("Clothes", -1);
+        }
+        // GUI Box or Lable on the left of the screen with the contence Clothes
+        GUI.Box(new Rect(0.75f * scrW, scrH + i * (0.5f * scrH), scrW, 0.5f * scrH), "Clothes");
+        // GUI button on the left of the screen with the contence >
+        if (GUI.Button(new Rect(1.75f * scrW, scrH + i * (0.5f * scrH), 0.5f * scrW, 0.5f * scrH), ">"))
+        // When pressed the button will run SetTexture and grab the Clothes Material and move the texture index in the direction  1
+        {
+            SetTexture("Clothes", 1);
+        }
+        // Move down the screen with the int using ++ each grouping of GUI elements are moved using this
+        i++;
+        #endregion
         #region Random Reset
         // Create 2 buttons one Random and one Reset
         // Random will feed a rnandom amount to the direction
@@ -310,15 +409,21 @@ public class CustomisationSet : MonoBehaviour
             SetTexture("Hair", Random.Range(0, hairMax - 1));
             SetTexture("Mouth", Random.Range(0, mouthMax - 1));
             SetTexture("Eyes", Random.Range(0, eyesMax - 1));
+            SetTexture("Armour", Random.Range(0, armourMax - 1));
+            SetTexture("Clothes", Random.Range(0, clothesMax - 1));
         }
         // Reset will set all to 0 both use SetTexture
-        if (GUI.Button(new Rect(1.25f * scrW, scrH + i * (0.5f * scrW, 0.5f * scrH), "Reset"))
+        //Rect (xStart,yStart,xSize, ySize)
+        if (GUI.Button(new Rect(1.25f * scrW, scrH + i * (0.5f * scrH), scrW, 0.5f * scrH), "Reset"))
         {
             SetTexture("Skin", skinIndex = 0);
             SetTexture("Hair", hairIndex = 0);
             SetTexture("Mouth", mouthIndex = 0);
             SetTexture("Eyes", eyesIndex = 0);
+            SetTexture("Armour", armourIndex = 0);
+            SetTexture("Clothes", clothesIndex = 0);
         }
+        i++;
         // Move down the screen with the int using ++ each grouping of GUI elemetns are moved using thia
         #endregion
         #region Character Name and Save & Play
@@ -331,7 +436,7 @@ public class CustomisationSet : MonoBehaviour
         {
             // This button will run the save fuction and also load into the game level
             Save();
-            SceneManager.LoadScene("Game");
+            SceneManager.LoadScene("Game + Pause Menu");
         }
 
     }
