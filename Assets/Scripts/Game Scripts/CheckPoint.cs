@@ -2,35 +2,68 @@
 using System.Collections;
 //this script can be found in the Component section under the option Character Set Up 
 //CheckPoint
-public class CheckPoint : MonoBehaviour 
+[AddComponentMenu("Character Set Up/CheckPoint")]
+public class CheckPoint : MonoBehaviour
 {
-	#region Variables
-	//[Header("Check Point Elements")]
-	//GameObject for our currentCheck
-	//[Header("Character Handler")]
-	//character handler script that holds the players health
-	#endregion
-	#region Start
-		//the character handler is the component attached to our player
-		#region Check if we have Key
-		//if we have a save key called SpawnPoint
-			//then our checkpoint is equal to the game object that is named after our save file
-			//our transform.position is equal to that of the checkpoint
-		#endregion
-	#endregion
-	#region Update
-		//if our characters health is less than or equal to 0
-			//our transform.position is equal to that of the checkpoint
-			//our characters health is equal to full health
-			//character is alive
-			//characters controller is active		
-	#endregion
-	#region OnTriggerEnter
-	//Collider other
-		//if our other objects tag when compared is CheckPoint
-			//our checkpoint is equal to the other object
-			//save our SpawnPoint as the name of that object
-	#endregion
+    #region Variables
+    [Header("Check Point Elements")]
+    //GameObject for our currentCheck
+    public GameObject curCheckPoint;
+    [Header("Character Handler")]
+    //character handler script that holds the players health
+    public CharacterHandler charH;
+    #endregion
+    #region Start
+    void Start()
+    {
+
+        //the character handler is the component attached to our player
+        charH = this.GetComponent<CharacterHandler>();
+        #region Check if we have Key
+        //if we have a save key called SpawnPoint
+        if (PlayerPrefs.HasKey("SpawnPoint"))
+        {
+            //then our checkpoint is equal to the game object that is named after our save file
+            curCheckPoint = GameObject.Find(PlayerPrefs.GetString("SpawnPoint"));
+            //our transform.position is equal to that of the checkpoint
+            this.transform.position = curCheckPoint.transform.position;
+        }
+        #endregion
+    }
+    #endregion
+    #region Update
+    void Update()
+    {
+        //if our characters health is less than or equal to 0
+        if (charH.curHealth == 0)
+        {
+            //our transform.position is equal to that of the checkpoint
+            this.transform.position = curCheckPoint.transform.position;
+            //our characters health is equal to full health
+            charH.curHealth = charH.maxHealth;
+            //character is alive
+            charH.isAlive = true;
+            //characters controller is active	
+            CharacterController controller = this.GetComponent<CharacterController>();
+            controller.enabled = true;
+        }
+
+    }
+    #endregion
+    #region OnTriggerEnter
+    //Collider col
+    void OnTriggerEnter(Collider col)
+    {
+        //if our other objects tag when compared is CheckPoint
+        if (col.CompareTag("CheckPoint"))
+        {
+            //our checkpoint is equal to the other object
+            curCheckPoint = col.gameObject;
+            //save our SpawnPoint as the name of that object
+            PlayerPrefs.SetString("SpawnPoint", curCheckPoint.name);
+        }
+    }
+    #endregion
 }
 
 
