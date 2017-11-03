@@ -15,6 +15,8 @@ public class PickUp : MonoBehaviour
     #region Start
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         //connect our player to the player variable via tag
         player = GameObject.FindGameObjectWithTag("Player");
         //connect our Camera to the mainCam variable via tag
@@ -42,6 +44,17 @@ public class PickUp : MonoBehaviour
                 {
                     //Debug that we hit a NPC
                     Debug.Log("Hit the NPC");
+                    Dialogue dlg = hitinfo.transform.GetComponent<Dialogue>();
+                    if (dlg != null)
+                    {
+                        dlg.showDlg = true;
+                        player.GetComponent<MouseLook>().enabled = false;
+                        player.GetComponent<Movement>().enabled = false;
+                        mainCam.GetComponent<MouseLook>().enabled = false;
+                        Cursor.lockState = CursorLockMode.None;
+                        Cursor.visible = true;
+
+                    }
                 }
 
                 #endregion

@@ -436,7 +436,7 @@ public class CustomisationSet : MonoBehaviour
         {
             // This button will run the save fuction and also load into the game level
             Save();
-            SceneManager.LoadScene("Game + Pause Menu");
+            SceneManager.LoadScene("Game");
         }
 
     }
