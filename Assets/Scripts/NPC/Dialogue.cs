@@ -19,7 +19,7 @@ public class Dialogue : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        mainCam = GameObject.FindGameObjectWithTag("Main Camera").GetComponent<MouseLook>();
+        mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<MouseLook>();
     }
     #endregion
     #region OnGUI
@@ -32,10 +32,10 @@ public class Dialogue : MonoBehaviour
 
             GUI.Box(new Rect(0, 6 * scrH, Screen.width, 3 * scrH), npcName + ": " + text[index]);
             // If not at the end of the dialogue or not at the options part
-            if (!(index+1 >= text.Length || index == optionsIndex))
+            if (!(index + 1 >= text.Length || index == optionsIndex))
             {
                 // Next button
-                if (GUI.Button(new Rect(15 * scrW, 8.5f*scrH, scrW, 0.5f * scrH), "Next"))
+                if (GUI.Button(new Rect(15 * scrW, 8.5f * scrH, scrW, 0.5f * scrH), "Next"))
                 {
                     index++;
                 }
